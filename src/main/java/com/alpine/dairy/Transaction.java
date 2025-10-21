@@ -55,6 +55,11 @@ public class Transaction {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name, this.phoneNumber, this.address, this.cardEndDigits);
+    }
+
+    @Override
     public String toString() {
         return "Transaction{"
         + "id=" + this.id

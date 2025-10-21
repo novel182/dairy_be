@@ -40,6 +40,11 @@ public class Customer {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name, this.phoneNumber);
+    }
+
+    @Override
     public String toString() {
         return "Customer{"
         + "id=" + this.id
