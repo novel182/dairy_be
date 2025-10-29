@@ -18,12 +18,12 @@ public class Transaction {
     private String phoneNumber;
     private String address;
 
-    @Size(min=4, max=4)
-    @Column(length=4)
+   @Size(min=4, max=4)
+   @Column(length=4)
     private String cardEndDigits;
 
-    Transaction() {}
-    Transaction(String name, String phoneNumber, String address, String cardEndDigits) {
+    public Transaction() {}
+    public Transaction(String name, String phoneNumber, String address, String cardEndDigits) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
