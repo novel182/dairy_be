@@ -1,7 +1,7 @@
 package com.alpine.dairy;
 
 public class CustomerNotFoundException extends RuntimeException {
-    public CustomerNotFoundException(String id) {
+    public CustomerNotFoundException(Long id) {
         super("Could not find customer " + id);
     }
 }

@@ -28,10 +28,10 @@ public class CustomerController {
 
     @GetMapping("/customers/{id}")
     public Customer getCustomer(@PathVariable Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
-    @PostMapping("customers")
+    @PostMapping("/customers")
     public Customer addCustomer(@RequestBody Customer newCustomer) {
         return repository.save(newCustomer);
     }
