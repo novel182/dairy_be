@@ -10,7 +10,7 @@ public class CustomerNotFoundAdvice {
 
     @ExceptionHandler(CustomerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String customerNotFoundHandler(CustomerNotFoundException ex) {
-      return ex.getMessage();
+    String customerNotFoundHandler(CustomerNotFoundException err) {
+      return err.getMessage();
     }
   }
