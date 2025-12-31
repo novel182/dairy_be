@@ -37,7 +37,7 @@ public class OrderRequestController {
         } else {
             newRequest.setStatus("unable");
         }
-        orderRequestRepository.save(newRequest);
-        return newRequest.getRequestId();
+        OrderRequest lastOrder = orderRequestRepository.save(newRequest);
+        return lastOrder.getRequestId();
     }
 }
