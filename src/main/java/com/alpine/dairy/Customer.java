@@ -15,7 +15,7 @@ public class Customer {
     private String name;
     private String phoneNumber;
 
-    Customer() {}
+    public Customer() {}
     Customer(String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;

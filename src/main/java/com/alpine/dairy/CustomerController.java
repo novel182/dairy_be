@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class CustomerController {
     private final CustomerRepository repository;
 
-    public CustomerController(CustomerRepository repository) {
+    CustomerController(CustomerRepository repository) {
         this.repository = repository;
     }
 

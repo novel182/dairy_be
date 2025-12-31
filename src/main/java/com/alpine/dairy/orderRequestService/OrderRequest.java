@@ -1,11 +1,10 @@
 package com.alpine.dairy.orderRequestService;
 
-import java.util.Map;
-import java.util.Objects;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+
+import java.util.Objects;
 
 @Entity
 public class OrderRequest {
