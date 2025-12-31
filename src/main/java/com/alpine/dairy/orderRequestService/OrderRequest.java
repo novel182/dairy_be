@@ -19,8 +19,7 @@ public class OrderRequest {
     private Long inventoryTransactionId;
 
     public OrderRequest() {}
-    public OrderRequest(Long requestId, int mozzarella, int paneer, int kanchan, String status, Long inventoryTransactionId) {
-        this.requestId = requestId;
+    public OrderRequest(int mozzarella, int paneer, int kanchan, String status, Long inventoryTransactionId) {
         this.mozzarella = mozzarella;
         this.paneer = paneer;
         this.kanchan = kanchan;
