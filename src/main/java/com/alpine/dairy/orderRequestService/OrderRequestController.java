@@ -40,4 +40,16 @@ public class OrderRequestController {
         OrderRequest lastOrder = orderRequestRepository.save(newRequest);
         return lastOrder.getRequestId();
     }
+
+    public OrderRequest fulfilHoldRequest(OrderRequest orderRequest){
+        // boolean canFulfill = inventoryManager.canFulfill(orderRequest);
+        // OrderRequest existingRequest = orderRequestRepository.findById(orderRequest.getRequestId()).orElse(null);
+        // if(canFulfill){
+        //     orderRequest.setStatus("fulfilled");
+        // } else {
+        //     orderRequest.setStatus("unable");
+        // }
+        return orderRequestRepository.save(orderRequest);
+
+    }
 }

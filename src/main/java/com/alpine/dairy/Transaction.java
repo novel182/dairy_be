@@ -14,9 +14,6 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Long id;
-    private String name;  // change the name to customer id when we start storing that
-    private String phoneNumber;
-    private String address;
     private Long customerId;
     private Long orderRequestId;
 
@@ -25,25 +22,16 @@ public class Transaction {
 //     private String cardEndDigits;
 
     public Transaction() {}
-    public Transaction(String name, String phoneNumber, String address, Long customerId, Long orderRequestId, String cardEndDigits) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
+    public Transaction(Long customerId, Long orderRequestId, String cardEndDigits) {
         this.customerId = customerId;
         this.orderRequestId = orderRequestId;
     }
 
     public Long getId() { return this.id; }
-    public String getName() { return this.name; }
-    public String getPhoneNumber() { return this.phoneNumber; }
-    public String getAddress() { return this.address; }
     public Long getCustomerId() { return this.customerId; }
     public Long getOrderRequestId() { return this.orderRequestId; }
 
     public void setId( Long id ) { this.id = id; }
-    public void setName( String name ) { this.name = name; }
-    public void setPhoneNumber( String phoneNumber ) { this.phoneNumber = phoneNumber; }
-    public void setAddress( String address ) { this.address=address; }
     public void setCustomerId( Long customerId ) { this.customerId = customerId; }
     public void setOrderRequestId( Long orderRequestId ) { this.orderRequestId = orderRequestId; }
 
@@ -53,9 +41,6 @@ public class Transaction {
         if(!(o instanceof Transaction)) return false;
         Transaction t = (Transaction) o;
         return Objects.equals(this.id, t.id)
-            && Objects.equals(this.name, t.name)
-            && Objects.equals(this.phoneNumber, t.phoneNumber)
-            && Objects.equals(this.address, t.address)
             && Objects.equals(this.customerId, t.customerId)
             && Objects.equals(this.orderRequestId, t.orderRequestId);
 
@@ -63,16 +48,13 @@ public class Transaction {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.phoneNumber, this.address, this.customerId, this.orderRequestId);
+        return Objects.hash(this.id, this.customerId, this.orderRequestId);
     }
 
     @Override
     public String toString() {
         return "Transaction{"
         + "id=" + this.id
-        + ", name=" + this.name
-        + ", phone_number=" + this.phoneNumber
-        + ", address=" + this.address
         + ", customerId=" + this.customerId
         + ", orderRequestId=" + this.orderRequestId
         + "}";

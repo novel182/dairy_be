@@ -14,20 +14,24 @@ public class Customer {
     private Long id;
     private String name;
     private String phoneNumber;
+    private String address;
 
     public Customer() {}
-    Customer(String name, String phoneNumber) {
+    Customer(String name, String phoneNumber, String address) {
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 
     public Long getId() { return this.id; }
     public String getName() { return this.name; }
     public String getPhoneNumber() { return this.phoneNumber; }
+    public String getAddress() { return this.address; }
 
     public void setId( Long id ) { this.id = id; }
     public void setName( String name ) { this.name = name; }
     public void setPhoneNumber( String phoneNumber ) { this.phoneNumber = phoneNumber; }
+    public void setAddress( String address ) { this.address=address; }
 
     @Override
     public boolean equals(Object o) {
@@ -36,12 +40,13 @@ public class Customer {
         Customer c = (Customer) o;
         return Objects.equals(this.id, c.id)
             && Objects.equals(this.name, c.name)
-            && Objects.equals(this.phoneNumber, c.phoneNumber);
+            && Objects.equals(this.phoneNumber, c.phoneNumber)
+            && Objects.equals(this.address, c.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.phoneNumber);
+        return Objects.hash(this.id, this.name, this.phoneNumber, this.address);
     }
 
     @Override
@@ -50,6 +55,7 @@ public class Customer {
         + "id=" + this.id
         + ", name=" + this.name
         + ", phone_number=" + this.phoneNumber
+        + ", address=" + this.address
         + "}";
     }
 }

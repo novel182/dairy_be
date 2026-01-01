@@ -14,8 +14,8 @@ public class LoadDatabase {
     CommandLineRunner initDatabase(CustomerRepository customerRepository) {
   
       return (args) -> {
-        log.info("Preloading " + customerRepository.save(new Customer("John Doe", "1234567890")));
-        log.info("Preloading " + customerRepository.save(new Customer("Jane Smith", "9876543210")));
+        log.info("Preloading " + customerRepository.save(new Customer("John Doe", "1234567890", "123 Main St")));
+        log.info("Preloading " + customerRepository.save(new Customer("Jane Smith", "9876543210", "456 Oak Ave")));
       };
     }
 
