@@ -17,22 +17,22 @@ public class OrderRequestController {
         this.orderRequestManager = orderRequestManager;
     }
 
-    @GetMapping("/orderRequest")
+    @GetMapping("/orderRequests")
     public List<OrderRequest> getMethodName() {
         return orderRequestManager.getAllOrderRequests();
     }
 
-    @GetMapping("/orderRequest/{id}")
+    @GetMapping("/orderRequests/{id}")
     public OrderRequest getMethodName(@PathVariable Long id) {
         return orderRequestManager.getOrderRequestById(id);
     }
 
-    @PostMapping("/orderRequest")
+    @PostMapping("/orderRequests")
     public Long postMethodName(@RequestBody OrderRequest newRequest) {
         return orderRequestManager.addNewOrderRequest(newRequest);
     }
 
-    @PostMapping("orderRequest/fulfill/{id}")
+    @GetMapping("/orderRequests/fulfill/{id}")
     public List<InventoryItem> fulfillDeliveredRequest(@PathVariable Long id) {
         return orderRequestManager.fulfillDeliveredRequest(id);
     }

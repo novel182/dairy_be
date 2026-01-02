@@ -4,8 +4,10 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.alpine.dairy.orderRequestService.OrderRequest;
+
 
 @RestController
 public class InventoryManagementController {
@@ -14,6 +16,12 @@ public class InventoryManagementController {
     InventoryManagementController(InventoryManager inventoryManager) {
         this.inventoryManager = inventoryManager;
     }
+
+    @GetMapping("inventory")
+    public List<InventoryItem> getMethodName() {
+        return inventoryManager.getAllItems();
+    }
+    
 
     @PostMapping("inventory/fulfill")
     public List<InventoryItem> fulfillDeliveredRequest(@RequestBody OrderRequest deliveredRequest) {

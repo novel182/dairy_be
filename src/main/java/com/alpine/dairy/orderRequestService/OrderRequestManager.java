@@ -26,8 +26,8 @@ public class OrderRequestManager {
     }
 
     public Long addNewOrderRequest(OrderRequest newRequest){
-        boolean canFulfill = inventoryManager.canFulfill(newRequest);
-        if(canFulfill){
+        boolean isRequestOnHold = inventoryManager.holdRequest(newRequest);
+        if(isRequestOnHold){
             newRequest.setStatus("pending");
         } else {
             newRequest.setStatus("unable");
@@ -36,29 +36,34 @@ public class OrderRequestManager {
         return lastOrder.getRequestId();
     }
 
-    public OrderRequest fulfilHoldRequest(OrderRequest orderRequest){
+    public OrderRequest fulfillHoldRequest(OrderRequest orderRequest){
         boolean canFulfill = inventoryManager.canFulfill(orderRequest);
-        OrderRequest existingRequest = orderRequestRepository.findById(orderRequest.getRequestId()).orElse(null);
-
-        if(canFulfill && existingRequest != null){
-            orderRequest.setStatus("fulfilled");
-        } else {
+        if(!canFulfill){
             orderRequest.setStatus("unable");
-            return orderRequest;
+            return orderRequestRepository.save(orderRequest);
         }
+        
+        orderRequestRepository.findById(orderRequest.getRequestId())
+            .ifPresent(oldRequest -> inventoryManager.changeHoldRequest(oldRequest, orderRequest));
 
-        boolean fulfilSuccess = inventoryManager.fulfilHoldRequest(orderRequest);
-        if(fulfilSuccess == false){
+        boolean fulfilSuccess = inventoryManager.fulfillHoldRequest(orderRequest);
+        if(!fulfilSuccess){
             orderRequest.setStatus("unable");
+        }
+        else{
+            orderRequest.setStatus("fulfilled");
         }
         return orderRequestRepository.save(orderRequest);
     }
 
     public List<InventoryItem> fulfillDeliveredRequest(@PathVariable Long id) {
         OrderRequest deliveredRequest = orderRequestRepository.findById(id).orElse(null);
+        if(deliveredRequest == null || deliveredRequest.getStatus().equals("unable")){
+            return List.of();
+        }
         boolean isDeliveryAccounted = inventoryManager.fulfillDeliveredRequest(deliveredRequest);
         if(!isDeliveryAccounted){
-            return null;
+            return List.of();
         }
         return inventoryManager.getAllItems();
     }

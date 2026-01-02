@@ -25,14 +25,44 @@ public class InventoryManager {
         if(requestedItem == null){
             return false;
         }
-        int availableQuantity = requestedItem.getTotalQuantity() - requestedItem.getQuantityTemporaryHold();
+        int availableQuantity = requestedItem.getTotalQuantity() - requestedItem.getQuantityTemporaryHold() - requestedItem.getQuantityPromised();
         if(availableQuantity < amount){
             return false;
         }
         return true;
     }
 
-    public boolean fulfilHoldRequest(OrderRequest orderRequest){
+    public boolean addHoldQuantity(int mozzarella, int paneer, int kanchan){
+        inventoryRepository.findById("mozzarella").ifPresent(item -> {
+            item.setQuantityTemporaryHold(item.getQuantityTemporaryHold() + mozzarella);
+            inventoryRepository.save(item);
+        });
+        inventoryRepository.findById("paneer").ifPresent(item -> {
+            item.setQuantityTemporaryHold(item.getQuantityTemporaryHold() + paneer);
+            inventoryRepository.save(item);
+        });
+        inventoryRepository.findById("kanchan").ifPresent(item -> {
+            item.setQuantityTemporaryHold(item.getQuantityTemporaryHold() + kanchan);
+            inventoryRepository.save(item);
+        });
+        return true;
+    }
+
+    public boolean holdRequest(OrderRequest orderRequest){
+        return addHoldQuantity(orderRequest.getMozzarella(), orderRequest.getPaneer(), orderRequest.getKanchan());
+    }
+
+    public boolean changeHoldRequest(OrderRequest oldRequest, OrderRequest newRequest){
+        int mozzarellaDiff = newRequest.getMozzarella() - oldRequest.getMozzarella();
+        int paneerDiff = newRequest.getPaneer() - oldRequest.getPaneer();
+        int kanchanDiff = newRequest.getKanchan() - oldRequest.getKanchan();
+        if(mozzarellaDiff == 0 || paneerDiff == 0 || kanchanDiff == 0){
+            return true;
+        }
+        return addHoldQuantity(mozzarellaDiff, paneerDiff, kanchanDiff);
+    }
+
+    public boolean fulfillHoldRequest(OrderRequest orderRequest){
         List<InventoryItem> items = getAllItems();
         InventoryItem mozzarellaItem = items.get(0);
         InventoryItem paneerItem = items.get(1);
@@ -42,9 +72,9 @@ public class InventoryManager {
             return false;
         }
 
-        if(mozzarellaItem.getQuantityTemporaryHold() < orderRequest.getMozzarella()
-            || paneerItem.getQuantityTemporaryHold() < orderRequest.getPaneer()
-            || kanchanItem.getQuantityTemporaryHold() < orderRequest.getKanchan()){
+        if(mozzarellaItem.getQuantityTemporaryHold() > mozzarellaItem.getTotalQuantity()
+            || paneerItem.getQuantityTemporaryHold() > paneerItem.getTotalQuantity()
+            || kanchanItem.getQuantityTemporaryHold() > kanchanItem.getTotalQuantity()){
             return false;
         }
 
@@ -73,9 +103,9 @@ public class InventoryManager {
             return false;
         }
 
-        if(mozzarellaItem.getQuantityPromised() < orderRequest.getMozzarella()
-            || paneerItem.getQuantityPromised() < orderRequest.getPaneer()
-            || kanchanItem.getQuantityPromised() < orderRequest.getKanchan()){
+        if(mozzarellaItem.getQuantityPromised() > mozzarellaItem.getTotalQuantity()
+            || paneerItem.getQuantityPromised() > paneerItem.getTotalQuantity()
+            || kanchanItem.getQuantityPromised() > kanchanItem.getTotalQuantity()){
             return false;
         }
 
@@ -95,9 +125,7 @@ public class InventoryManager {
     }
 
     public List<InventoryItem> getAllItems(){
-        InventoryItem mozzarellaItem = inventoryRepository.findById("mozzarella").orElse(null);
-        InventoryItem paneerItem = inventoryRepository.findById("paneer").orElse(null);
-        InventoryItem kanchanItem = inventoryRepository.findById("kanchan").orElse(null);
-        return List.of(mozzarellaItem, paneerItem, kanchanItem);
+        // The items have to be on the fixed order: mozzarella, paneer, kanchan
+        return inventoryRepository.findAll();
     }
 }
