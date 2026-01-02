@@ -11,45 +11,24 @@ import com.alpine.dairy.inventoryManagementService.InventoryManager;
 
 @RestController
 public class OrderRequestController {
-    private final InventoryManager inventoryManager;
-    private final OrderRequestRepository orderRequestRepository;
+    private final OrderRequestManager orderRequestManager;
 
-    OrderRequestController(InventoryManager inventoryManager, OrderRequestRepository orderRequestRepository) {
-        this.inventoryManager = inventoryManager;
-        this.orderRequestRepository = orderRequestRepository;
+    OrderRequestController(OrderRequestManager orderRequestManager) {
+        this.orderRequestManager = orderRequestManager;
     }
 
     @GetMapping("/orderRequest")
     public List<OrderRequest> getMethodName() {
-        return orderRequestRepository.findAll();
+        return orderRequestManager.getAllOrderRequests();
     }
 
     @GetMapping("/orderRequest/{id}")
     public OrderRequest getMethodName(@PathVariable Long id) {
-        return orderRequestRepository.findById(id).orElse(null);
+        return orderRequestManager.getOrderRequestById(id);
     }
 
     @PostMapping("/orderRequest")
     public Long postMethodName(@RequestBody OrderRequest newRequest) {
-        boolean canFulfill = inventoryManager.canFulfill(newRequest);
-        if(canFulfill){
-            newRequest.setStatus("pending");
-        } else {
-            newRequest.setStatus("unable");
-        }
-        OrderRequest lastOrder = orderRequestRepository.save(newRequest);
-        return lastOrder.getRequestId();
-    }
-
-    public OrderRequest fulfilHoldRequest(OrderRequest orderRequest){
-        // boolean canFulfill = inventoryManager.canFulfill(orderRequest);
-        // OrderRequest existingRequest = orderRequestRepository.findById(orderRequest.getRequestId()).orElse(null);
-        // if(canFulfill){
-        //     orderRequest.setStatus("fulfilled");
-        // } else {
-        //     orderRequest.setStatus("unable");
-        // }
-        return orderRequestRepository.save(orderRequest);
-
+        return orderRequestManager.addNewOrderRequest(newRequest);
     }
 }

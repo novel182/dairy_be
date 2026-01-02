@@ -9,25 +9,29 @@ public class InventoryItem {
     private String productId;
     private String productName;
     private int totalQuantity;
-    private int quantityHold;
+    private int quantityTemporaryHold;
+    private int quantityPromised;
 
     public InventoryItem() {}
-    public InventoryItem(String productId, String productName, int totalQuantity, int quantityHold) {
+    public InventoryItem(String productId, String productName, int totalQuantity, int quantityTemporaryHold, int quantityPromised) {
         this.productId = productId;
         this.productName = productName;
         this.totalQuantity = totalQuantity;
-        this.quantityHold = quantityHold;
+        this.quantityTemporaryHold = quantityTemporaryHold;
+        this.quantityPromised = quantityPromised;
     }
 
     public String getProductId() { return productId; }
     public String getProductName() { return productName; }
     public int getTotalQuantity() { return totalQuantity; }
-    public int getQuantityHold() { return quantityHold; }
+    public int getQuantityTemporaryHold() { return quantityTemporaryHold; }
+    public int getQuantityPromised() { return quantityPromised; }
 
     public void setProductId(String productId) { this.productId = productId; }
     public void setProductName(String productName) { this.productName = productName; }
     public void setTotalQuantity(int quantityAvailable) { this.totalQuantity = quantityAvailable; }
-    public void setQuantityHold(int quantityHold) { this.quantityHold = quantityHold; }
+    public void setQuantityTemporaryHold(int quantityTemporaryHold) { this.quantityTemporaryHold = quantityTemporaryHold; }
+    public void setQuantityPromised(int quantityPromised) { this.quantityPromised = quantityPromised; }
 
     @Override
     public boolean equals(Object o) {
@@ -37,12 +41,13 @@ public class InventoryItem {
         return this.productId.equals(ii.productId)
             && this.productName.equals(ii.productName)
             && this.totalQuantity == ii.totalQuantity
-            && this.quantityHold == ii.quantityHold;
+            && this.quantityTemporaryHold == ii.quantityTemporaryHold
+            && this.quantityPromised == ii.quantityPromised;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(this.productId, this.productName, this.totalQuantity, this.quantityHold);
+        return java.util.Objects.hash(this.productId, this.productName, this.totalQuantity, this.quantityTemporaryHold, this.quantityPromised);
     }
 
     @Override
@@ -51,7 +56,8 @@ public class InventoryItem {
             + "productId='" + this.productId
             + ", productName='" + this.productName
             + ", totalQuantity=" + this.totalQuantity
-            + ", quantityHold=" + this.quantityHold
+            + ", quantityTemporaryHold=" + this.quantityTemporaryHold
+            + ", quantityPromised=" + this.quantityPromised
             + '}';
     }
 }
