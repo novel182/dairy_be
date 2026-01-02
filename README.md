@@ -5,7 +5,8 @@ Need gradle to build and run the server.
 - The inventory order has to be mozzarella, paneer, kanchan : constrained by fulfill methods in InventoryManager
 
 ### To do
-- Add timestamp on orderRequest
+- Add timestamp on orderRequest and inventoryItem
+- Change the name on database columns and entity alias from camel case (ex: updated_at instead of updatedAt)
 - Return a item specific reason why the order request was not fulfilled
 - INVESTIGATE: Predict the amount of products to be made in the future and get the order request fulfillment around it
 - Payment system
