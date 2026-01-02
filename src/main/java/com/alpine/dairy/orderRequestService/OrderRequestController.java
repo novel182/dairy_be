@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alpine.dairy.inventoryManagementService.InventoryManager;
+import com.alpine.dairy.inventoryManagementService.InventoryItem;
 
 @RestController
 public class OrderRequestController {
@@ -30,5 +30,10 @@ public class OrderRequestController {
     @PostMapping("/orderRequest")
     public Long postMethodName(@RequestBody OrderRequest newRequest) {
         return orderRequestManager.addNewOrderRequest(newRequest);
+    }
+
+    @PostMapping("orderRequest/fulfill/{id}")
+    public List<InventoryItem> fulfillDeliveredRequest(@PathVariable Long id) {
+        return orderRequestManager.fulfillDeliveredRequest(id);
     }
 }

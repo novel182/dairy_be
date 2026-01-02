@@ -63,7 +63,7 @@ public class InventoryManager {
         return true;
     }
 
-    public boolean deliveredPromisedOrder(OrderRequest orderRequest){
+    public boolean fulfillDeliveredRequest(OrderRequest orderRequest){
         List<InventoryItem> items = getAllItems();
         InventoryItem mozzarellaItem = items.get(0);
         InventoryItem paneerItem = items.get(1);
@@ -90,11 +90,11 @@ public class InventoryManager {
         kanchanItem.setTotalQuantity(kanchanItem.getTotalQuantity() - orderRequest.getKanchan());
         kanchanItem.setQuantityPromised(kanchanItem.getQuantityPromised() - orderRequest.getKanchan());
         inventoryRepository.save(kanchanItem);
-        
+
         return true;
     }
 
-    private List<InventoryItem> getAllItems(){
+    public List<InventoryItem> getAllItems(){
         InventoryItem mozzarellaItem = inventoryRepository.findById("mozzarella").orElse(null);
         InventoryItem paneerItem = inventoryRepository.findById("paneer").orElse(null);
         InventoryItem kanchanItem = inventoryRepository.findById("kanchan").orElse(null);

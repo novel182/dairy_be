@@ -2,7 +2,9 @@ package com.alpine.dairy.orderRequestService;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import com.alpine.dairy.inventoryManagementService.InventoryItem;
 import com.alpine.dairy.inventoryManagementService.InventoryManager;
 
 @Service
@@ -50,6 +52,14 @@ public class OrderRequestManager {
             orderRequest.setStatus("unable");
         }
         return orderRequestRepository.save(orderRequest);
+    }
 
+    public List<InventoryItem> fulfillDeliveredRequest(@PathVariable Long id) {
+        OrderRequest deliveredRequest = orderRequestRepository.findById(id).orElse(null);
+        boolean isDeliveryAccounted = inventoryManager.fulfillDeliveredRequest(deliveredRequest);
+        if(!isDeliveryAccounted){
+            return null;
+        }
+        return inventoryManager.getAllItems();
     }
 }
