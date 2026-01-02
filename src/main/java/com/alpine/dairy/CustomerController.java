@@ -52,7 +52,7 @@ public class CustomerController {
             .orElseGet(() -> {
                 return repository.save(newCustomer);
             });
-        updatedCustomer.setId(id);  //Hibernate does not allow 'GeneratedValue' field to be set manually during save
+        updatedCustomer.setCustomerId(id);  //Hibernate does not allow 'GeneratedValue' field to be set manually during save
         return new ResponseEntity<>(updatedCustomer, HttpStatus.CREATED);
     }
 }

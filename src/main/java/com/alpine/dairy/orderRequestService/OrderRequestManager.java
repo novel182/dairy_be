@@ -28,9 +28,9 @@ public class OrderRequestManager {
     public Long addNewOrderRequest(OrderRequest newRequest){
         boolean isRequestOnHold = inventoryManager.holdRequest(newRequest);
         if(isRequestOnHold){
-            newRequest.setStatus("pending");
+            newRequest.setRequestStatus("pending");
         } else {
-            newRequest.setStatus("unable");
+            newRequest.setRequestStatus("unable");
         }
         OrderRequest lastOrder = orderRequestRepository.save(newRequest);
         return lastOrder.getRequestId();
@@ -39,7 +39,7 @@ public class OrderRequestManager {
     public OrderRequest fulfillHoldRequest(OrderRequest orderRequest){
         boolean canFulfill = inventoryManager.canFulfill(orderRequest);
         if(!canFulfill){
-            orderRequest.setStatus("unable");
+            orderRequest.setRequestStatus("unable");
             return orderRequestRepository.save(orderRequest);
         }
         
@@ -48,17 +48,17 @@ public class OrderRequestManager {
 
         boolean fulfilSuccess = inventoryManager.fulfillHoldRequest(orderRequest);
         if(!fulfilSuccess){
-            orderRequest.setStatus("unable");
+            orderRequest.setRequestStatus("unable");
         }
         else{
-            orderRequest.setStatus("fulfilled");
+            orderRequest.setRequestStatus("fulfilled");
         }
         return orderRequestRepository.save(orderRequest);
     }
 
     public List<InventoryItem> fulfillDeliveredRequest(@PathVariable Long id) {
         OrderRequest deliveredRequest = orderRequestRepository.findById(id).orElse(null);
-        if(deliveredRequest == null || deliveredRequest.getStatus().equals("unable")){
+        if(deliveredRequest == null || deliveredRequest.getRequestStatus().equals("unable")){
             return List.of();
         }
         boolean isDeliveryAccounted = inventoryManager.fulfillDeliveredRequest(deliveredRequest);

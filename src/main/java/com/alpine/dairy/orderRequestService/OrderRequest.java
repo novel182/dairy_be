@@ -15,15 +15,15 @@ public class OrderRequest {
     private int mozzarella;
     private int paneer;
     private int kanchan;
-    private String status;
+    private String requestStatus;
     private Long customerId;
 
     public OrderRequest() {}
-    public OrderRequest(int mozzarella, int paneer, int kanchan, String status, Long customerId) {
+    public OrderRequest(int mozzarella, int paneer, int kanchan, String requestStatus, Long customerId) {
         this.mozzarella = mozzarella;
         this.paneer = paneer;
         this.kanchan = kanchan;
-        this.status = status;
+        this.requestStatus = requestStatus;
         this.customerId = customerId;
     }
 
@@ -31,14 +31,14 @@ public class OrderRequest {
     public int getMozzarella() { return mozzarella; }
     public int getPaneer() { return paneer; }
     public int getKanchan() { return kanchan; }
-    public String getStatus() { return status; }
+    public String getRequestStatus() { return requestStatus; }
     public Long getCustomerId() { return customerId; }
     
     public void setRequestId(Long requestId) { this.requestId = requestId; }
     public void setMozzarella(int mozzarella) { this.mozzarella = mozzarella; }
     public void setPaneer(int paneer) { this.paneer = paneer; }
     public void setKanchan(int kanchan) { this.kanchan = kanchan; }
-    public void setStatus(String status) { this.status = status; }
+    public void setRequestStatus(String requestStatus) { this.requestStatus = requestStatus; }
     public void setCustomerId(Long customerId) { this.customerId = customerId; }
 
     @Override
@@ -50,13 +50,13 @@ public class OrderRequest {
             && this.mozzarella == or.mozzarella
             && this.paneer == or.paneer
             && this.kanchan == or.kanchan
-            && this.status.equals(or.status)
+            && this.requestStatus.equals(or.requestStatus)
             && this.customerId.equals(or.customerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.requestId, this.mozzarella, this.paneer, this.kanchan, this.status, this.customerId);
+        return Objects.hash(this.requestId, this.mozzarella, this.paneer, this.kanchan, this.requestStatus, this.customerId);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class OrderRequest {
         + ", mozzarella=" + this.mozzarella
         + ", paneer=" + this.paneer
         + ", kanchan=" + this.kanchan
-        + ", status=" + this.status
+        + ", requestStatus=" + this.requestStatus
         + ", customerId=" + this.customerId
         + "}";
     }

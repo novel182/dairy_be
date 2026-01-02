@@ -11,7 +11,7 @@ public class Customer {
     
     @Id
     @GeneratedValue
-    private Long id;
+    private Long customerId;
     private String name;
     private String phoneNumber;
     private String address;
@@ -23,12 +23,12 @@ public class Customer {
         this.address = address;
     }
 
-    public Long getId() { return this.id; }
+    public Long getCustomerId() { return this.customerId; }
     public String getName() { return this.name; }
     public String getPhoneNumber() { return this.phoneNumber; }
     public String getAddress() { return this.address; }
 
-    public void setId( Long id ) { this.id = id; }
+    public void setCustomerId( Long customerId ) { this.customerId = customerId; }
     public void setName( String name ) { this.name = name; }
     public void setPhoneNumber( String phoneNumber ) { this.phoneNumber = phoneNumber; }
     public void setAddress( String address ) { this.address=address; }
@@ -38,7 +38,7 @@ public class Customer {
         if(this == o) return true;
         if(!(o instanceof Customer)) return false;
         Customer c = (Customer) o;
-        return Objects.equals(this.id, c.id)
+        return Objects.equals(this.customerId, c.customerId)
             && Objects.equals(this.name, c.name)
             && Objects.equals(this.phoneNumber, c.phoneNumber)
             && Objects.equals(this.address, c.address);
@@ -46,15 +46,15 @@ public class Customer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.phoneNumber, this.address);
+        return Objects.hash(this.customerId, this.name, this.phoneNumber, this.address);
     }
 
     @Override
     public String toString() {
         return "Customer{"
-        + "id=" + this.id
+        + "customerId=" + this.customerId
         + ", name=" + this.name
-        + ", phone_number=" + this.phoneNumber
+        + ", phoneNumber=" + this.phoneNumber
         + ", address=" + this.address
         + "}";
     }
