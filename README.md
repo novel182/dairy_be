@@ -25,9 +25,10 @@ On terminal, use `./gradlew bootrun` to start the server.
 
 ### To do
 - Add timestamp on orderRequest and inventoryItem
-- Change the name on database columns and entity alias from camel case (ex: updated_at instead of updatedAt)
 - Return a item specific reason why the order request was not fulfilled
 - Response Entity return on controllers
+- multithreading requests
+- throttle on query from the same client
 - INVESTIGATE: Predict the amount of products to be made in the future and get the order request fulfillment around it
 - Payment system
 - More robust checkout and ordering pages
