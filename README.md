@@ -27,8 +27,8 @@ On terminal, use `./gradlew bootrun` to start the server.
 - Add timestamp on orderRequest and inventoryItem
 - Return a item specific reason why the order request was not fulfilled
 - Response Entity return on controllers
-- multithreading requests
 - throttle on query from the same client
+- caching
 - INVESTIGATE: Predict the amount of products to be made in the future and get the order request fulfillment around it
 - Payment system
 - More robust checkout and ordering pages
