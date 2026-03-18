@@ -20,11 +20,11 @@ create table order_request(
     customer_id bigint not null,
     updated_at timestamptz
 );
-insert into order_request(request_id, mozzarella, paneer, kanchan, request_status, customer_id, updated_at)
-values
-(1, 2, 5, 1, 'pending', 1, now()),
-(2, 0, 2, 14, 'pending', 1, now()),
-(3, 10, 0, 5, 'unable', 2, now());
+-- insert into order_request(request_id, mozzarella, paneer, kanchan, request_status, customer_id, updated_at)
+-- values
+-- (1, 2, 5, 1, 'pending', 1, now()),
+-- (2, 0, 2, 14, 'pending', 1, now()),
+-- (3, 10, 0, 5, 'unable', 2, now());
 
 
 

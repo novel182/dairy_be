@@ -1,6 +1,9 @@
 package com.alpine.dairy.inventoryManagementService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +18,12 @@ public class InventoryManager {
     }
 
     public boolean canFulfill(OrderRequest orderRequest){
-        boolean canFulfill = hasSufficientItem("mozzarella", orderRequest.getMozzarella())
-            && hasSufficientItem("paneer", orderRequest.getPaneer())
-            && hasSufficientItem("kanchan", orderRequest.getKanchan());
-        return canFulfill;
+        for (Map.Entry<String, Integer> entry : orderRequest.getItems().entrySet()) {
+            if (!hasSufficientItem(entry.getKey(), entry.getValue())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean hasSufficientItem(String productId, int amount){
@@ -27,18 +32,15 @@ public class InventoryManager {
             return false;
         }
         int availableQuantity = requestedItem.getTotalQuantity() - requestedItem.getQuantityTemporaryHold() - requestedItem.getQuantityPromised();
-        if(availableQuantity < amount){
-            return false;
-        }
-        return true;
+        return availableQuantity >= amount;
     }
 
     /* Hold Requests */
     @Transactional
-    public boolean addHoldQuantity(int mozzarella, int paneer, int kanchan){
-        updateHoldQuantity("mozzarella", mozzarella);
-        updateHoldQuantity("paneer", paneer);
-        updateHoldQuantity("kanchan", kanchan);
+    public boolean addHoldQuantity(Map<String, Integer> items){
+        for (Map.Entry<String, Integer> entry : items.entrySet()) {
+            updateHoldQuantity(entry.getKey(), entry.getValue());
+        }
         return true;
     }
 
@@ -52,42 +54,47 @@ public class InventoryManager {
 
     @Transactional
     public boolean holdRequest(OrderRequest orderRequest){
-        return addHoldQuantity(orderRequest.getMozzarella(), orderRequest.getPaneer(), orderRequest.getKanchan());
+        return addHoldQuantity(orderRequest.getItems());
     }
 
     @Transactional
     public boolean changeHoldRequest(OrderRequest oldRequest, OrderRequest newRequest){
-        int mozzarellaDiff = newRequest.getMozzarella() - oldRequest.getMozzarella();
-        int paneerDiff = newRequest.getPaneer() - oldRequest.getPaneer();
-        int kanchanDiff = newRequest.getKanchan() - oldRequest.getKanchan();
-        
-        if(mozzarellaDiff == 0 && paneerDiff == 0 && kanchanDiff == 0){
-            return false;
+        Set<String> allProductIds = new HashSet<>();
+        allProductIds.addAll(oldRequest.getItems().keySet());
+        allProductIds.addAll(newRequest.getItems().keySet());
+
+        boolean changed = false;
+        for (String productId : allProductIds) {
+            int oldQty = oldRequest.getItems().getOrDefault(productId, 0);
+            int newQty = newRequest.getItems().getOrDefault(productId, 0);
+            int diff = newQty - oldQty;
+            if (diff != 0) {
+                updateHoldQuantity(productId, diff);
+                changed = true;
+            }
         }
-        return addHoldQuantity(mozzarellaDiff, paneerDiff, kanchanDiff);
+        return changed;
     }
 
 
     /* Fulfillment of Hold Requests */
     @Transactional
     public boolean fulfillHoldRequest(OrderRequest orderRequest){
-    InventoryItem mozzarellaItem = getItemById("mozzarella");
-        InventoryItem paneerItem = getItemById("paneer");
-        InventoryItem kanchanItem = getItemById("kanchan");
-
-        if(mozzarellaItem == null || paneerItem == null || kanchanItem == null){
-            return false;
+        Map<String, Integer> orderItems = orderRequest.getItems();
+        
+        // Validation phase
+        for (String productId : orderItems.keySet()) {
+            InventoryItem item = getItemById(productId);
+            if (item == null || item.getQuantityTemporaryHold() < orderItems.get(productId)) {
+                return false;
+            }
         }
 
-        if(mozzarellaItem.getQuantityTemporaryHold() < orderRequest.getMozzarella()
-            || paneerItem.getQuantityTemporaryHold() < orderRequest.getPaneer()
-            || kanchanItem.getQuantityTemporaryHold() < orderRequest.getKanchan()){
-            return false;
+        // Execution phase
+        for (String productId : orderItems.keySet()) {
+            InventoryItem item = getItemById(productId);
+            updateFulfillmentQuantities(item, orderItems.get(productId));
         }
-
-        updateFulfillmentQuantities(mozzarellaItem, orderRequest.getMozzarella());
-        updateFulfillmentQuantities(paneerItem, orderRequest.getPaneer());
-        updateFulfillmentQuantities(kanchanItem, orderRequest.getKanchan());
 
         return true;
     }
@@ -103,23 +110,21 @@ public class InventoryManager {
     /* Fulfillment of Promised Requests */
     @Transactional
     public boolean fulfillDeliveredRequest(OrderRequest orderRequest){
-        InventoryItem mozzarellaItem = getItemById("mozzarella");
-        InventoryItem paneerItem = getItemById("paneer");
-        InventoryItem kanchanItem = getItemById("kanchan");
+        Map<String, Integer> orderItems = orderRequest.getItems();
 
-        if(mozzarellaItem == null || paneerItem == null || kanchanItem == null){
-            return false;
+        // Validation phase
+        for (String productId : orderItems.keySet()) {
+            InventoryItem item = getItemById(productId);
+            if (item == null || item.getQuantityPromised() < orderItems.get(productId)) {
+                return false;
+            }
         }
 
-        if(mozzarellaItem.getQuantityPromised() < orderRequest.getMozzarella()
-            || paneerItem.getQuantityPromised() < orderRequest.getPaneer()
-            || kanchanItem.getQuantityPromised() < orderRequest.getKanchan()){
-            return false;
+        // Execution phase
+        for (String productId : orderItems.keySet()) {
+            InventoryItem item = getItemById(productId);
+            updateDeliveryQuantities(item, orderItems.get(productId));
         }
-
-        updateDeliveryQuantities(mozzarellaItem, orderRequest.getMozzarella());
-        updateDeliveryQuantities(paneerItem, orderRequest.getPaneer());
-        updateDeliveryQuantities(kanchanItem, orderRequest.getKanchan());
 
         return true;
     }
